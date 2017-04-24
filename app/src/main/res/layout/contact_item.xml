@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+     >
+
+    <data>
+
+        <variable
+            name="contactItemViewModel"
+            type="com.android.gojek.viewmodel.ContactItemViewModel"/>
+    </data>
+<RelativeLayout
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/item_contact">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_favourite"
+        android:id="@+id/favourite"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/cicular_shape"
+        android:layout_toRightOf="@+id/favourite"
+        android:id="@+id/nameTitle"
+        android:textColor="@android:color/white"
+        tools:imageUrl="@{contactItemViewModel.pictureProfile}"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/nameTitle"
+        android:id="@+id/contactName"
+        android:lines="1"
+        android:ellipsize="end"
+        android:text="@{contactItemViewModel.fullName}"
+
+        />
+
+</RelativeLayout>
+    </layout>
