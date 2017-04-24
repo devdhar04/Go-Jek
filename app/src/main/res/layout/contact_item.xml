@@ -12,17 +12,23 @@
     </data>
 <RelativeLayout
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/item_contact">
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:id="@+id/item_contact"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:onClick="@{contactItemViewModel::onItemClick}">
+
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:src="@mipmap/ic_favourite"
         android:id="@+id/favourite"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="16dp"
+        tools:favourite="@{contactItemViewModel.Favourite}"
         />
 
     <TextView
@@ -34,17 +40,21 @@
         android:layout_toRightOf="@+id/favourite"
         android:id="@+id/nameTitle"
         android:textColor="@android:color/white"
-        tools:imageUrl="@{contactItemViewModel.pictureProfile}"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text="@{contactItemViewModel.contactFirstChar}"
         />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="10dp"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/nameTitle"
         android:id="@+id/contactName"
         android:lines="1"
         android:ellipsize="end"
+        android:textSize="14sp"
+        android:textColor="@color/colorContactName"
         android:text="@{contactItemViewModel.fullName}"
 
         />

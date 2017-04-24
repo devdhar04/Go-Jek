@@ -35,7 +35,7 @@ public ContactListAdapter.ContactListViewHolder onCreateViewHolder(ViewGroup par
 
     @Override
     public void onBindViewHolder(ContactListAdapter.ContactListViewHolder holder, int position) {
-        holder.bindMovie(contactList.get(position));
+        holder.bindContact(contactList.get(position));
     }
 
 
@@ -58,7 +58,7 @@ public static class ContactListViewHolder extends RecyclerView.ViewHolder {
        this.mContactItemBinding = contactItemBinding;
     }
 
-    void bindMovie(Contact contact) {
+    void bindContact(Contact contact) {
         if (mContactItemBinding.getContactItemViewModel() == null) {
             mContactItemBinding.setContactItemViewModel(
                     new ContactItemViewModel(contact, itemView.getContext()));

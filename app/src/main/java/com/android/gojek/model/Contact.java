@@ -14,10 +14,11 @@ public class Contact {
     public String firstName;
     @SerializedName("last_name")
     public String lastName;
-    @SerializedName("last_name")
+    @SerializedName("email")
     public String email;
     @SerializedName("favorite")
     public boolean isFavorite;
+    @SerializedName("url")
     public String contactDetailUrl;
     @SerializedName("phone_number")
     public String phoneNumber;

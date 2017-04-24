@@ -2,21 +2,24 @@ package com.android.gojek.view;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.gojek.R;
 import com.android.gojek.databinding.ActivityContactListBinding;
+import com.android.gojek.model.Contact;
+import com.android.gojek.view.adapter.ContactListAdapter;
 import com.android.gojek.viewmodel.ContactListViewModel;
 
-public class ContactListActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Observable;
+import java.util.Observer;
+
+public class ContactListActivity extends AppCompatActivity implements Observer {
 
 
     public ActivityContactListBinding activityContactListBinding;
@@ -25,9 +28,10 @@ public class ContactListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initDatBinding();
-        setupListMovieView(activityContactListBinding.listContact);
+        setupListContactView(activityContactListBinding.listContact);
 
         setSupportActionBar(activityContactListBinding.toolbar);
+        setupObserver(contactListViewModel);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -49,9 +53,9 @@ public class ContactListActivity extends AppCompatActivity {
 
     }
 
-    private void setupListMovieView(RecyclerView mRecyclerView) {
-       // MovieAdapter adapter = new MovieAdapter();
-        //mRecyclerView.setAdapter(adapter);
+    private void setupListContactView(RecyclerView mRecyclerView) {
+        ContactListAdapter adapter = new ContactListAdapter();
+        mRecyclerView.setAdapter(adapter);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         //setScrollListener(mRecyclerView,mLayoutManager);
@@ -78,5 +82,27 @@ public class ContactListActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void setupObserver(Observable observable) {
+        observable.addObserver(this);
+    }
+
+    @Override protected void onDestroy() {
+        super.onDestroy();
+        contactListViewModel.reset();
+    }
+
+
+
+    @Override public void update(Observable observable, Object data) {
+        if (observable instanceof ContactListViewModel) {
+            ContactListAdapter movieAdapter = (ContactListAdapter) activityContactListBinding.listContact.getAdapter();
+            ContactListViewModel movieViewModel = (ContactListViewModel) observable;
+            ArrayList<Contact> arrayList = new ArrayList<Contact>(Arrays.asList(movieViewModel.getContactList()));
+            movieAdapter.setContactList(arrayList);
+
+        }
     }
 }
