@@ -3,9 +3,15 @@ package com.android.gojek.viewmodel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.gojek.R;
 import com.android.gojek.model.Contact;
@@ -21,6 +27,8 @@ public class ContactItemViewModel extends BaseObservable {
 
     private Contact contact;
     private Context context;
+
+    String color[] = {"#40A189","#324AF9","#B8251E","#4BB341","#EB6426","#8333FC" };
 
     public ContactItemViewModel(Contact contact, Context context) {
         this.contact = contact;
@@ -40,6 +48,29 @@ public class ContactItemViewModel extends BaseObservable {
     {
         return contact.isFavorite;
     }
+    static int index=0;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public GradientDrawable getDrawable()
+    {
+        GradientDrawable bgShape = (GradientDrawable) context.getResources().getDrawable(R.drawable.cicular_shape,context.getTheme());
+        bgShape.setColor(Color.parseColor(color[index]));
+        if(index<color.length-1) {
+            index = index + 1;
+        }
+        else
+        {
+            index =0;
+        }
+     return bgShape;
+    }
+    @BindingAdapter("drawable")
+    public static void setDrawable(TextView textView,Drawable drawable)
+    {
+        textView.setBackgroundDrawable(drawable);
+
+    }
+
 
     @BindingAdapter("favourite")
     public static void setFavourite(ImageView imageView,boolean isFavourite)
@@ -47,7 +78,7 @@ public class ContactItemViewModel extends BaseObservable {
         if(isFavourite) {
             imageView.setImageResource(R.mipmap.ic_star);
         }
-        {
+        else{
             imageView.setImageResource(R.mipmap.ic_favourite);
         }
 

@@ -23,7 +23,7 @@
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@mipmap/ic_favourite"
+        android:src="@mipmap/ic_star"
         android:id="@+id/favourite"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
@@ -42,7 +42,8 @@
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:gravity="center"
-        android:text="@{contactItemViewModel.contactFirstChar}"
+
+        tools:drawable="@{contactItemViewModel.Drawable}"
         />
     <TextView
         android:layout_width="wrap_content"

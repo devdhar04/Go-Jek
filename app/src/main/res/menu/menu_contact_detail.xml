@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.android.gojek.view.ContactDetailActivity">
+    <item
+        android:id="@+id/action_favourite"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_favourite"
+        android:icon="@mipmap/ic_favourite"
+        />
+    <item
+        android:id="@+id/action_edit"
+        app:showAsAction="ifRoom"
+        android:title="@string/action_edit"
+        android:icon="@mipmap/ic_edit"
+        />
+</menu>

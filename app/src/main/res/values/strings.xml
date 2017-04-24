@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Go-Jek</string>
-    <string name="action_settings">Search</string>
+    <string name="action_search">Search</string>
     <string name="error_loading_contacts">Error loading Contacts !</string>
     <string name="mobile">Mobile</string>
     <string name="home">Home</string>
-
+    <string name="action_favourite">Favourite</string>
+    <string name="action_edit">Edit</string>
 </resources>

@@ -1,6 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="spacing_large">14dp</dimen>
-    <dimen name="letter_medium">16sp</dimen>
+    <dimen name="letter_medium">14sp</dimen>
+    <dimen name="letter_large">16sp</dimen>
     <dimen name="spacing_medium">8dp</dimen>
 </resources>
