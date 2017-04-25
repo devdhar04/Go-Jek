@@ -6,4 +6,9 @@
     <string name="home">Home</string>
     <string name="action_favourite">Favourite</string>
     <string name="action_edit">Edit</string>
+    <string name="hint_name">Name</string>
+    <string name="hint_phone">Phone</string>
+    <string name="hint_email">Email</string>
+
+
 </resources>

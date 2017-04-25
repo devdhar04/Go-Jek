@@ -7,7 +7,9 @@ import java.util.Observable;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 
@@ -18,6 +20,8 @@ import com.android.gojek.data.ContactListResponse;
 import com.android.gojek.data.ContactListService;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
+import com.android.gojek.view.AddContactActivity;
+import com.android.gojek.view.ContactDetailActivity;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -106,6 +110,13 @@ public class ContactListViewModel extends Observable {
                     }
                 });
     }
+
+    public void onClick(View view)
+    {
+
+        context.startActivity(AddContactActivity.launchDetail(view.getContext(), null));
+    }
+
 
     public void reset() {
         unSubscribeFromObservable();

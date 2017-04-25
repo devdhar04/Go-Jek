@@ -6,4 +6,6 @@
     <color name="colorContactTitle">#689f38</color>
     <color name="colorContactName">#D9000000</color>
     <color name="colorlable">#8C000000</color>
+    <color name="colorEditField">#66000000</color>
+    <color name="colorContactBg">#607D8B</color>
 </resources>

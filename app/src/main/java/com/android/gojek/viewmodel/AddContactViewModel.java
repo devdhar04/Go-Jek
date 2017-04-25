@@ -9,7 +9,6 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,9 +19,7 @@ import com.android.gojek.R;
 import com.android.gojek.data.ContactDetailService;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
-
 import com.android.gojek.view.AddContactActivity;
-import com.android.gojek.view.ContactDetailActivity;
 import com.bumptech.glide.Glide;
 
 import rx.Subscription;
@@ -30,10 +27,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 
 /**
- * Created by dev on 16/04/17.
+ * Created by dev on 25/04/17.
  */
 
-public class ContactDetailViewModel extends BaseObservable {
+public class AddContactViewModel extends BaseObservable {
 
 
     private Contact contact;
@@ -42,18 +39,18 @@ public class ContactDetailViewModel extends BaseObservable {
 
     public ObservableInt movieProgress;
 
-    public ContactDetailViewModel(@NonNull Context context, Contact contact) {
+    public AddContactViewModel(@NonNull Context context, Contact contact) {
         this.context = context;
         this.contact = contact;
 
         movieProgress = new ObservableInt(View.VISIBLE);
-        fetchContactDetails();
+
 
     }
 
-    public String getTitle() {
+    public String getFirstName() {
 
-        return contact != null ? contact.firstName + " " + contact.lastName : "";
+        return contact != null ? contact.firstName   : "";
     }
 
     public String getMobileNumber() {
@@ -66,61 +63,7 @@ public class ContactDetailViewModel extends BaseObservable {
 
     }
 
-    public void clickEdit()
-    {
-        context.startActivity(AddContactActivity.launchDetail(context, contact));
-    }
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.image_phone:
-                callNumber();
-                break;
-            case R.id.image_sms:
-                sendSMS();
-                break;
-            case R.id.image_email:
-                sendEmail();
-                break;
 
-
-        }
-    }
-
-    private void callNumber() {
-        Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:"+contact.phoneNumber));
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        context.startActivity(callIntent);
-    }
-
-    private void sendSMS()
-    {
-        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-                + contact.phoneNumber)));
-    }
-
-    private void sendEmail()
-    {
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{contact.email});
-
-        try {
-            context.startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(context, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-
-        }
-    }
 
     public String getPictureProfile() {
         String imagePath = WebServiceConstants.BASE_URL;
@@ -132,13 +75,10 @@ public class ContactDetailViewModel extends BaseObservable {
 
 
 
-    public void onItemClick(View view) {
-        //Intent intent = new Intent(context, WebViewActivity.class);
-        //context.startActivity(intent);
-    }
 
 
-    private void fetchContactDetails() {
+
+    private void addContact() {
 
 
         unSubscribeFromObservable();

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+        <variable
+            name="addContactViewModel"
+            type="com.android.gojek.viewmodel.AddContactViewModel"/>
+    </data>
+
+    <RelativeLayout
+
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/imageLayout"
+
+        android:background="@color/colorContactBg">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/contactImage"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="24dp"
+            android:paddingBottom="4dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            app:imageUrl="@{addContactViewModel.pictureProfile}"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/captureImage"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:src="@mipmap/ic_image"
+            />
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/imageLayout"
+        android:paddingLeft="16dp"
+        android:id="@+id/nameLayout"
+        android:layout_marginTop="24dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_profile"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameField"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorEditField"
+            android:hint="@string/hint_name"
+            android:text="@{addContactViewModel.firstName}"
+             />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/nameLayout"
+        android:paddingLeft="16dp"
+        android:id="@+id/phoneLayout"
+        android:layout_marginTop="24dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_call_grey"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/phoneField"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorEditField"
+            android:hint="@string/hint_name"
+            android:inputType="phone"
+            android:text="@{addContactViewModel.mobileNumber}"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/phoneLayout"
+        android:paddingLeft="16dp"
+        android:layout_marginTop="24dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_email"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/emailField"
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp"
+            android:textSize="16sp"
+            android:textColor="@color/colorEditField"
+            android:hint="@string/hint_name"
+            android:inputType="textEmailAddress"
+            android:text="@{addContactViewModel.email}"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>
+    </layout>
