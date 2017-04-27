@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.gojek.ContactApplication;
 import com.android.gojek.R;
+import com.android.gojek.data.ContactAddService;
 import com.android.gojek.data.ContactDetailService;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
@@ -25,6 +26,8 @@ import com.bumptech.glide.Glide;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
+
+import static com.android.gojek.utils.WebServiceConstants.CONTACT_ADD_URL;
 
 /**
  * Created by dev on 25/04/17.
@@ -75,24 +78,21 @@ public class AddContactViewModel extends BaseObservable {
 
 
 
-
-
-
-    private void addContact() {
+    public void addContact() {
 
 
         unSubscribeFromObservable();
-        ContactApplication movieApplication = ContactApplication.create(context);
-        ContactDetailService movieDetailService = movieApplication.getContactDetailService();
-        subscription = movieDetailService.fetchContact(contact.contactDetailUrl)
+        ContactApplication contactApplication = ContactApplication.create(context);
+        ContactAddService movieDetailService = contactApplication.getContactAddService(CONTACT_ADD_URL+contact.id+".json");
+        subscription = movieDetailService.addContact(contact.firstName,contact.lastName,contact.phoneNumber,contact.email)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(movieApplication.subscribeScheduler())
-                .subscribe(new Action1<Contact>() {
+                .subscribeOn(contactApplication.subscribeScheduler())
+                .subscribe(new Action1<String>() {
                     @Override
-                    public void call(Contact movieResponse) {
+                    public void call(String movieResponse) {
                         movieProgress.set(View.GONE);
 
-                        changeMovieDataSet(movieResponse);
+                       // changeMovieDataSet(movieResponse);
                     }
                 }, new Action1<Throwable>() {
                     @Override

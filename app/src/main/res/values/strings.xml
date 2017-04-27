@@ -10,5 +10,7 @@
     <string name="hint_phone">Phone</string>
     <string name="hint_email">Email</string>
 
+    <string name="save">Save</string>
+
 
 </resources>

@@ -27,4 +27,12 @@ public class ContactsFactory {
             .build();
     return retrofit.create(ContactDetailService.class);
   }
+
+  public static ContactAddService createAddService(String url) {
+    Retrofit retrofit = new Retrofit.Builder().baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .build();
+    return retrofit.create(ContactAddService.class);
+  }
 }

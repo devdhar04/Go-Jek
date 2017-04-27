@@ -3,6 +3,7 @@ package com.android.gojek;
 import android.app.Application;
 import android.content.Context;
 
+import com.android.gojek.data.ContactAddService;
 import com.android.gojek.data.ContactDetailService;
 import com.android.gojek.data.ContactListService;
 import com.android.gojek.data.ContactsFactory;
@@ -19,6 +20,7 @@ public class ContactApplication extends Application {
 
     private ContactListService contactListService;
     private ContactDetailService contactDetailService;
+    private ContactAddService contactAddService;
     private Scheduler scheduler;
 
     private static ContactApplication get(Context context) {
@@ -40,11 +42,20 @@ public class ContactApplication extends Application {
 
         return contactDetailService;
     }
+
+    public ContactAddService getContactAddService(String url) {
+        if (contactAddService == null) contactAddService = ContactsFactory.createAddService(url);
+
+        return contactAddService;
+    }
+
     public Scheduler subscribeScheduler() {
         if (scheduler == null) scheduler = Schedulers.io();
 
         return scheduler;
     }
+
+
 
     public void setContactListService(ContactListService contactListService) {
         this.contactListService = contactListService;

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,6 +24,9 @@ public class AddContactActivity extends AppCompatActivity {
     private static final String EXTRA_FIRST_NAME = "CONTACT_FIRST_NAME";
     private static final String EXTRA_LAST_NAME = "CONTACT_LAST_NAME";
     private static final String EXTRA_IMAGE = "IMAGE_URL";
+    private static final String EXTRA_MOBILE = "CONTACT_MOBILE";
+    private static final String EXTRA_EMAIL = "CONTACT_EMAIL";
+    private static final String EXTRA_SCREEN_NAME = "CONTACT_ADD";
 
     private AddContactBinding addContactActivityBinding;
 
@@ -42,6 +46,9 @@ public class AddContactActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_FIRST_NAME,contact.firstName);
             intent.putExtra(EXTRA_LAST_NAME,contact.lastName);
             intent.putExtra(EXTRA_IMAGE,contact.contactDetailUrl);
+            intent.putExtra(EXTRA_MOBILE,contact.phoneNumber);
+            intent.putExtra(EXTRA_EMAIL,contact.email);
+            intent.putExtra(EXTRA_SCREEN_NAME,EXTRA_SCREEN_NAME);
         }
 
         return intent;
@@ -51,7 +58,9 @@ public class AddContactActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_contact_detail, menu);
+
+            getMenuInflater().inflate(R.menu.menu_add_contact, menu);
+
         return true;
     }
 
@@ -63,12 +72,11 @@ public class AddContactActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_edit) {
+        if (id == R.id.action_save) {
+            addContactActivityBinding.getAddContactViewModel().addContact();
             return true;
         }
-        else  if (id == R.id.action_favourite) {
-            return true;
-        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -80,6 +88,8 @@ public class AddContactActivity extends AppCompatActivity {
             contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
             contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
             contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
+            contact.setPhoneNumber(getIntent().getStringExtra(EXTRA_MOBILE));
+            contact.setEmail(getIntent().getStringExtra(EXTRA_EMAIL));
         }
 
         AddContactViewModel addContactViewModel = new AddContactViewModel(this,contact);
