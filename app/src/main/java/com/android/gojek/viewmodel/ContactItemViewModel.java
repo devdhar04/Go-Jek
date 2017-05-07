@@ -40,6 +40,14 @@ public class ContactItemViewModel extends BaseObservable {
         return contact.firstName + " " + contact.lastName;
     }
 
+    public String getStartName() {
+
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(contact.firstName.charAt(0));
+        return stringBuffer.toString().toUpperCase();
+    }
+
+
     public String getContactFirstChar() {
 
         return String.valueOf(contact.firstName.toUpperCase().charAt(0));

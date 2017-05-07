@@ -22,6 +22,7 @@
         android:id="@+id/imageLayout"
 
         android:background="@color/colorContactBg">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -32,6 +33,7 @@
             android:paddingBottom="4dp"
             android:layout_marginLeft="100dp"
             android:layout_marginRight="100dp"
+            android:src="@mipmap/ic_betty_allen"
             app:imageUrl="@{addContactViewModel.pictureProfile}"
             />
         <ImageView
@@ -43,6 +45,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginRight="16dp"
             android:src="@mipmap/ic_image"
+            android:onClick="@{addContactViewModel::clickPicture}"
             />
 
 
@@ -70,20 +73,57 @@
             android:layout_marginLeft="32dp"
             android:layout_marginRight="32dp"
             android:textSize="16sp"
+            android:lines="1"
             android:textColor="@color/colorEditField"
+            android:textColorHint="@color/hintTextColor"
             android:hint="@string/hint_name"
             android:text="@{addContactViewModel.firstName}"
+
              />
 
     </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/errorTextColor"
+        android:visibility="@{addContactViewModel.FirstNameVisibility}"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/nameLayout"
+            android:paddingLeft="16dp"
+            android:id="@+id/lastNameLayout"
+            android:layout_marginTop="24dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_profile"
+                android:visibility="invisible"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lastNameField"
+                android:layout_marginLeft="32dp"
+                android:layout_marginRight="32dp"
+                android:textSize="16sp"
+                android:textColor="@color/colorEditField"
+                android:hint="@string/hint_lastName"
+                android:lines="1"
+                android:text="@{addContactViewModel.LastName}"
+                android:textColorHint="@color/hintTextColor"
+                />
 
+        </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_below="@+id/nameLayout"
+        android:layout_below="@+id/lastNameLayout"
         android:paddingLeft="16dp"
         android:id="@+id/phoneLayout"
         android:layout_marginTop="24dp">
@@ -100,12 +140,15 @@
             android:layout_marginRight="32dp"
             android:textSize="16sp"
             android:textColor="@color/colorEditField"
-            android:hint="@string/hint_name"
+            android:hint="@string/hint_phone"
             android:inputType="phone"
+            android:maxLength="13"
             android:text="@{addContactViewModel.mobileNumber}"
+            android:textColorHint="@color/hintTextColor"
             />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -127,13 +170,19 @@
             android:layout_marginRight="32dp"
             android:textSize="16sp"
             android:textColor="@color/colorEditField"
-            android:hint="@string/hint_name"
+            android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:text="@{addContactViewModel.email}"
+            android:textColorHint="@color/hintTextColor"
             />
 
     </LinearLayout>
-
+        <ProgressBar
+            android:id="@+id/progress_movie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:visibility="@{addContactViewModel.movieProgress}"/>
 
 </RelativeLayout>
     </layout>

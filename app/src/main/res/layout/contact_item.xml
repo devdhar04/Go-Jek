@@ -45,6 +45,21 @@
 
         tools:drawable="@{contactItemViewModel.Drawable}"
         />
+
+    <TextView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="32dp"
+        android:layout_centerVertical="true"
+
+        android:layout_toRightOf="@+id/favourite"
+        android:id="@+id/startName"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:gravity="center"
+        android:text="@{contactItemViewModel.StartName}"
+
+        />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

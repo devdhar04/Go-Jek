@@ -9,20 +9,20 @@ import android.databinding.BindingAdapter;
 import android.databinding.ObservableInt;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.gojek.ContactApplication;
 import com.android.gojek.R;
-import com.android.gojek.data.ContactDetailService;
+import com.android.gojek.data.ContactApiService;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
 
 import com.android.gojek.view.AddContactActivity;
-import com.android.gojek.view.ContactDetailActivity;
 import com.bumptech.glide.Glide;
 
 import rx.Subscription;
@@ -42,12 +42,15 @@ public class ContactDetailViewModel extends BaseObservable {
 
     public ObservableInt movieProgress;
 
+    private String contactDetailUrl = "";
     public ContactDetailViewModel(@NonNull Context context, Contact contact) {
         this.context = context;
         this.contact = contact;
 
         movieProgress = new ObservableInt(View.VISIBLE);
+
         fetchContactDetails();
+
 
     }
 
@@ -132,19 +135,15 @@ public class ContactDetailViewModel extends BaseObservable {
 
 
 
-    public void onItemClick(View view) {
-        //Intent intent = new Intent(context, WebViewActivity.class);
-        //context.startActivity(intent);
-    }
 
 
     private void fetchContactDetails() {
 
-
+        contactDetailUrl = contact.contactDetailUrl;
         unSubscribeFromObservable();
         ContactApplication movieApplication = ContactApplication.create(context);
-        ContactDetailService movieDetailService = movieApplication.getContactDetailService();
-        subscription = movieDetailService.fetchContact(contact.contactDetailUrl)
+        ContactApiService ContactApiService = movieApplication.getContactApiService();
+        subscription = ContactApiService.fetchContact(contactDetailUrl)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(movieApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
@@ -164,6 +163,76 @@ public class ContactDetailViewModel extends BaseObservable {
                     }
                 });
     }
+
+     private void setFavouriteIcon(Menu menu)
+     {
+         if(contact.isFavorite) {
+             menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite_filled));
+         }
+         else
+         {
+             menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite));
+         }
+     }
+
+    public void updateContact(final Menu menu) {
+
+        contact.setFavorite(!contact.isFavorite);
+        movieProgress.set(View.VISIBLE);
+        String url = WebServiceConstants.CONTACT_ADD_URL+contact.id+".json";
+
+        unSubscribeFromObservable();
+        ContactApplication contactApplication = ContactApplication.create(context);
+        ContactApiService movieDetailService = contactApplication.getContactApiService();
+        subscription = movieDetailService.updateContact(url,contact)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(contactApplication.subscribeScheduler())
+                .subscribe(new Action1<Contact>() {
+                    @Override
+                    public void call(Contact contact) {
+                        movieProgress.set(View.GONE);
+                        setFavouriteIcon(menu);
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+
+                        movieProgress.set(View.GONE);
+
+                    }
+                });
+
+
+    }
+    public void deleteContact() {
+
+        movieProgress.set(View.VISIBLE);
+
+        unSubscribeFromObservable();
+        ContactApplication movieApplication = ContactApplication.create(context);
+        ContactApiService ContactApiService = movieApplication.getContactApiService();
+        subscription = ContactApiService.deleteContact(contactDetailUrl)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(movieApplication.subscribeScheduler())
+                .subscribe(new Action1<String>() {
+                    @Override
+                    public void call(String movieResponse) {
+                        movieProgress.set(View.GONE);
+
+                        ((AppCompatActivity)context).finish();
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        throwable.printStackTrace();
+
+                        movieProgress.set(View.GONE);
+
+                    }
+                });
+    }
+
 
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {

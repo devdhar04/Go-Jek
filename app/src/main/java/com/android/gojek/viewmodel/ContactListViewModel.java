@@ -1,27 +1,21 @@
 package com.android.gojek.viewmodel;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.View;
 
 
 import com.android.gojek.ContactApplication;
 import com.android.gojek.R;
-import com.android.gojek.data.ContactListResponse;
-import com.android.gojek.data.ContactListService;
+import com.android.gojek.data.ContactApiService;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
 import com.android.gojek.view.AddContactActivity;
-import com.android.gojek.view.ContactDetailActivity;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -85,11 +79,11 @@ public class ContactListViewModel extends Observable {
 
         final String URL = WebServiceConstants.CONTACT_LIST_URL;
         unSubscribeFromObservable();
-        ContactApplication movieApplication = ContactApplication.create(context);
-        ContactListService movieListService = movieApplication.getContactListService();
-        subscription = movieListService.fetchContacts(URL)
+        ContactApplication contactApplication = ContactApplication.create(context);
+        ContactApiService movieApiService = contactApplication.getContactApiService();
+        subscription = movieApiService.fetchContacts(URL)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(movieApplication.subscribeScheduler())
+                .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact[]>() {
                     @Override
                     public void call(Contact[] contactResponse) {
