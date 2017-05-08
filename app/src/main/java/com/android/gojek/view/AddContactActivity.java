@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import com.android.gojek.R;
 import com.android.gojek.databinding.AddContactBinding;
 import com.android.gojek.model.Contact;
+import com.android.gojek.utils.Utils;
 import com.android.gojek.viewmodel.AddContactViewModel;
 
 import java.io.IOException;
@@ -87,22 +89,27 @@ public class AddContactActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+
         if (id == R.id.action_save) {
-            Contact contact = new Contact();
-            contact.setFirstName(addContactActivityBinding.nameField.getText().toString());
-            contact.setLastName(addContactActivityBinding.lastNameField.getText().toString());
-            contact.setEmail(addContactActivityBinding.emailField.getText().toString());
-            contact.setPhoneNumber(addContactActivityBinding.phoneField.getText().toString());
+            if(Utils.isNetworkavailable(this)) {
+                Contact contact = new Contact();
+                contact.setFirstName(addContactActivityBinding.nameField.getText().toString());
+                contact.setLastName(addContactActivityBinding.lastNameField.getText().toString());
+                contact.setEmail(addContactActivityBinding.emailField.getText().toString());
+                contact.setPhoneNumber(addContactActivityBinding.phoneField.getText().toString());
 
-            if(getIntent().getStringExtra(EXTRA_SCREEN_NAME) != null && getIntent().getStringExtra(EXTRA_SCREEN_NAME).equals(EXTRA_SCREEN_NAME)) {
+                if (getIntent().getStringExtra(EXTRA_SCREEN_NAME) != null && getIntent().getStringExtra(EXTRA_SCREEN_NAME).equals(EXTRA_SCREEN_NAME)) {
 
-                addContactActivityBinding.getAddContactViewModel().addContact(contact);
+                    addContactActivityBinding.getAddContactViewModel().addContact(contact);
+                } else {
+                    addContactActivityBinding.getAddContactViewModel().updateContact(contact);
+                }
             }
-            else {
-                addContactActivityBinding.getAddContactViewModel().updateContact(contact);
+            else
+            {
+                Snackbar.make(addContactActivityBinding.mainLayout, "Check network connection !", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-
             return true;
         }
 

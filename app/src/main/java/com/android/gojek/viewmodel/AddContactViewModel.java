@@ -8,7 +8,9 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.android.gojek.BR;
 import com.android.gojek.ContactApplication;
 import com.android.gojek.data.ContactApiService;
 import com.android.gojek.model.Contact;
@@ -34,12 +36,21 @@ public class AddContactViewModel extends BaseObservable {
     private Subscription subscription;
 
     public ObservableInt movieProgress;
+    public ObservableInt firstNameVisibility;
+    public ObservableInt lastNameVisibility;
+    public ObservableInt mobileVisibility;
+    public ObservableInt emailVisibility;
+    private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
     public AddContactViewModel(@NonNull Context context, Contact contact) {
         this.context = context;
         this.contact = contact;
 
         movieProgress = new ObservableInt(View.GONE);
+        firstNameVisibility = new ObservableInt(View.GONE);
+        lastNameVisibility = new ObservableInt(View.GONE);
+        mobileVisibility = new ObservableInt(View.GONE);
+        emailVisibility = new ObservableInt(View.GONE);
 
 
     }
@@ -78,16 +89,7 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
-    public int getFirstNameVisibility()
-    {
-        int visbile = View.INVISIBLE;
-        if(contact.firstName != null && contact.firstName.trim().length()>=3)
-        {
-            visbile =  View.VISIBLE;
-        }
 
-        return visbile;
-    }
 
     public String getPictureProfile() {
         String imagePath = WebServiceConstants.BASE_URL;
@@ -98,8 +100,43 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
+    private boolean checkValidation(Contact con)
+    {
+        if(con.firstName.length()<3)
+        {
+            firstNameVisibility.set(View.VISIBLE);
+            return false;
+        }
+        else if(con.lastName.length()<3)
+        {
+            lastNameVisibility.set(View.VISIBLE);
+            firstNameVisibility.set(View.INVISIBLE);
+            return false;
+        }
+        else if(con.phoneNumber.length()<10)
+        {
+            mobileVisibility.set(View.VISIBLE);
+            lastNameVisibility.set(View.INVISIBLE);
+            firstNameVisibility.set(View.INVISIBLE);
+            return false;
+        }
+        else if(!con.email.matches(emailPattern))
+        {
+            emailVisibility.set(View.VISIBLE);
+            mobileVisibility.set(View.INVISIBLE);
+            lastNameVisibility.set(View.INVISIBLE);
+            firstNameVisibility.set(View.INVISIBLE);
+            return false;
+        }
+    return true;
+    }
+
 
     public void updateContact(Contact con) {
+        if(!checkValidation(con))
+        {
+            return ;
+        }
         movieProgress.set(View.VISIBLE);
         contact.setFirstName(con.firstName);
         contact.setLastName(con.lastName);
@@ -124,15 +161,20 @@ public class AddContactViewModel extends BaseObservable {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-
+                        Toast.makeText(context,"Network Error Occur !",Toast.LENGTH_SHORT).show();
                         movieProgress.set(View.GONE);
 
                     }
                 });
     }
 
-    public void addContact(Contact con) {
 
+
+    public void addContact(Contact con) {
+        if(!checkValidation(con))
+        {
+            return ;
+        }
         movieProgress.set(View.VISIBLE);
         String url = WebServiceConstants.CONTACT_LIST_URL;
 
@@ -153,7 +195,7 @@ public class AddContactViewModel extends BaseObservable {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-
+                        Toast.makeText(context,"Network Error Occur !",Toast.LENGTH_SHORT).show();
                         movieProgress.set(View.GONE);
 
                     }
@@ -168,12 +210,7 @@ public class AddContactViewModel extends BaseObservable {
         Glide.with(view.getContext()).load(imageUrl).into(view);
     }
 
-    private void changeContactDataSet(Contact movieResponse) {
 
-        this.contact = movieResponse;
-        notifyChange();
-
-    }
 
     private void unSubscribeFromObservable() {
         if (subscription != null && !subscription.isUnsubscribed()) {

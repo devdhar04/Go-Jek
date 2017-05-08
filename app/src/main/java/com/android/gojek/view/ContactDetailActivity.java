@@ -1,12 +1,17 @@
 package com.android.gojek.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.android.gojek.R;
 import com.android.gojek.databinding.ContactDetailBinding;
@@ -19,7 +24,7 @@ import retrofit2.http.HTTP;
  * Created by dev on 24/04/17.
  */
 
-public class ContactDetailActivity extends AppCompatActivity {
+public class ContactDetailActivity extends AppCompatActivity implements View.OnLongClickListener {
 
     private static final String EXTRA_URL = "DETAIL_URL";
     private static final String EXTRA_FIRST_NAME = "CONTACT_FIRST_NAME";
@@ -34,6 +39,8 @@ public class ContactDetailActivity extends AppCompatActivity {
                 DataBindingUtil.setContentView(this, R.layout.contact_detail);
         setSupportActionBar(movieDetailActivityBinding.toolbar);
         getExtrasFromIntent();
+        movieDetailActivityBinding.mobileNumber.setOnLongClickListener(this);
+        movieDetailActivityBinding.email.setOnLongClickListener(this);
     }
 
     public static Intent launchDetail(Context context, Contact contact) {
@@ -92,6 +99,12 @@ public class ContactDetailActivity extends AppCompatActivity {
             movieDetailActivityBinding.getContactDetailViewModel().deleteContact();
          return true;
         }
+        else if(id == R.id.action_share)
+        {
+            movieDetailActivityBinding.getContactDetailViewModel().share();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -110,4 +123,16 @@ public class ContactDetailActivity extends AppCompatActivity {
         setTitle(contact.firstName+" "+contact.lastName);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getExtrasFromIntent();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public boolean onLongClick(View v) {
+        movieDetailActivityBinding.getContactDetailViewModel().copyToClipBoard(v);
+        return false;
+    }
 }

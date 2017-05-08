@@ -14,7 +14,8 @@
 
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@android:color/white"
+        android:id="@+id/mainLayout">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -86,7 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/errorTextColor"
-        android:visibility="@{addContactViewModel.FirstNameVisibility}"/>
+        android:text="First name should have atlest 3 char"
+        android:visibility="@{addContactViewModel.firstNameVisibility}"
+        android:layout_below="@+id/nameLayout"
+        android:layout_marginLeft="77dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,6 +122,14 @@
                 />
 
         </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/errorTextColor"
+            android:text="Last name should have atlest 3 char"
+            android:visibility="@{addContactViewModel.lastNameVisibility}"
+            android:layout_below="@+id/lastNameLayout"
+            android:layout_marginLeft="77dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -148,7 +160,14 @@
             />
 
     </LinearLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/errorTextColor"
+            android:text="Enter 10 digit mobile number"
+            android:visibility="@{addContactViewModel.mobileVisibility}"
+            android:layout_below="@+id/phoneLayout"
+            android:layout_marginLeft="77dp"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -156,6 +175,7 @@
         android:gravity="center_vertical"
         android:layout_below="@+id/phoneLayout"
         android:paddingLeft="16dp"
+        android:id="@+id/emailLayout"
         android:layout_marginTop="24dp">
         <ImageView
             android:layout_width="wrap_content"
@@ -177,6 +197,14 @@
             />
 
     </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/errorTextColor"
+            android:text="Email is invalid"
+            android:visibility="@{addContactViewModel.emailVisibility}"
+            android:layout_below="@+id/emailLayout"
+            android:layout_marginLeft="77dp"/>
         <ProgressBar
             android:id="@+id/progress_movie"
             android:layout_width="wrap_content"
