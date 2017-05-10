@@ -37,36 +37,32 @@ public class AddContactActivity extends AppCompatActivity {
     private static final String EXTRA_CONTACT_ID = "CONTACT_ID";
 
 
-
-
     private AddContactBinding addContactActivityBinding;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addContactActivityBinding =
                 DataBindingUtil.setContentView(this, R.layout.add_contact);
-       // setSupportActionBar(addContactActivityBinding.toolbar);
+        // setSupportActionBar(addContactActivityBinding.toolbar);
         getExtrasFromIntent();
     }
 
     public static Intent launchDetail(Context context, Contact contact) {
         Intent intent = new Intent(context, AddContactActivity.class);
 
-        if(contact != null)
-        {
-            intent.putExtra(EXTRA_URL,contact.contactDetailUrl);
-            intent.putExtra(EXTRA_FIRST_NAME,contact.firstName);
-            intent.putExtra(EXTRA_LAST_NAME,contact.lastName);
-            intent.putExtra(EXTRA_IMAGE,contact.contactImageUrl);
-            intent.putExtra(EXTRA_MOBILE,contact.phoneNumber);
-            intent.putExtra(EXTRA_EMAIL,contact.email);
+        if (contact != null) {
+            intent.putExtra(EXTRA_URL, contact.contactDetailUrl);
+            intent.putExtra(EXTRA_FIRST_NAME, contact.firstName);
+            intent.putExtra(EXTRA_LAST_NAME, contact.lastName);
+            intent.putExtra(EXTRA_IMAGE, contact.contactImageUrl);
+            intent.putExtra(EXTRA_MOBILE, contact.phoneNumber);
+            intent.putExtra(EXTRA_EMAIL, contact.email);
 
-            intent.putExtra(EXTRA_CONTACT_ID,contact.id);
+            intent.putExtra(EXTRA_CONTACT_ID, contact.id);
 
-        }
-        else
-        {
-            intent.putExtra(EXTRA_SCREEN_NAME,EXTRA_SCREEN_NAME);
+        } else {
+            intent.putExtra(EXTRA_SCREEN_NAME, EXTRA_SCREEN_NAME);
         }
 
         return intent;
@@ -77,7 +73,7 @@ public class AddContactActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
 
-            getMenuInflater().inflate(R.menu.menu_add_contact, menu);
+        getMenuInflater().inflate(R.menu.menu_add_contact, menu);
 
         return true;
     }
@@ -91,7 +87,7 @@ public class AddContactActivity extends AppCompatActivity {
 
 
         if (id == R.id.action_save) {
-            if(Utils.isNetworkavailable(this)) {
+            if (Utils.isNetworkavailable(this)) {
                 Contact contact = new Contact();
                 contact.setFirstName(addContactActivityBinding.nameField.getText().toString());
                 contact.setLastName(addContactActivityBinding.lastNameField.getText().toString());
@@ -104,9 +100,7 @@ public class AddContactActivity extends AppCompatActivity {
                 } else {
                     addContactActivityBinding.getAddContactViewModel().updateContact(contact);
                 }
-            }
-            else
-            {
+            } else {
                 Snackbar.make(addContactActivityBinding.mainLayout, "Check network connection !", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
@@ -119,17 +113,17 @@ public class AddContactActivity extends AppCompatActivity {
     private void getExtrasFromIntent() {
 
         Contact contact = new Contact();
-        if(getIntent() != null) {
+        if (getIntent() != null) {
             contact.setFirstName(getIntent().getStringExtra(EXTRA_FIRST_NAME));
             contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
             contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
             contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
             contact.setPhoneNumber(getIntent().getStringExtra(EXTRA_MOBILE));
             contact.setEmail(getIntent().getStringExtra(EXTRA_EMAIL));
-            contact.setId(getIntent().getIntExtra(EXTRA_CONTACT_ID,0));
+            contact.setId(getIntent().getIntExtra(EXTRA_CONTACT_ID, 0));
         }
 
-        AddContactViewModel addContactViewModel = new AddContactViewModel(this,contact);
+        AddContactViewModel addContactViewModel = new AddContactViewModel(this, contact);
         addContactActivityBinding.setAddContactViewModel(addContactViewModel);
         //setTitle(contact.firstName+" "+contact.lastName);
     }

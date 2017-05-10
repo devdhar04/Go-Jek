@@ -2,6 +2,7 @@ package com.android.gojek.viewmodel;
 
 import java.util.Observable;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.databinding.ObservableField;
 import android.databinding.ObservableInt;
@@ -32,7 +33,7 @@ public class ContactListViewModel extends Observable {
     public ObservableInt contactRecycler;
     public ObservableInt contactLabel;
     public ObservableField<String> messageLabel;
-
+    private ProgressDialog progress;
     private Contact[] contactList;
     private Context context;
     private Subscription subscription;
@@ -90,7 +91,8 @@ public class ContactListViewModel extends Observable {
                     public void call(Contact[] contactResponse) {
 
                         saveToDb(contactResponse);
-                        contactProgress.set(View.GONE);
+                        showProgressDialog();
+                        //contactProgress.set(View.GONE);
                         contactLabel.set(View.GONE);
                         contactRecycler.set(View.VISIBLE);
 
@@ -102,28 +104,31 @@ public class ContactListViewModel extends Observable {
                         throwable.printStackTrace();
                         messageLabel.set(context.getString(R.string.error_loading_contacts));
                         contactLabel.set(View.VISIBLE);
-                        contactProgress.set(View.GONE);
-                        //movieLabel.set(View.VISIBLE);
-                        //movieRecycler.set(View.GONE);
+                        if (progress != null && progress.isShowing()) {
+                            progress.cancel();
+                        }
+
                     }
                 });
     }
 
 
-    private void saveToDb(Contact[] contactResponse)
-    {
-        for (Contact contact : contactResponse)
-        {
+    private void showProgressDialog() {
+        progress = new ProgressDialog(context);
+        progress.setMessage("Please wait) ");
+        progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progress.setIndeterminate(true);
+        progress.setCancelable(false);
+    }
+
+    private void saveToDb(Contact[] contactResponse) {
+        for (Contact contact : contactResponse) {
             ContactHelper.getInstance(context).add(contact);
 
         }
     }
 
-
-
-    public void onClick(View view)
-    {
-
+    public void onClick(View view) {
         context.startActivity(AddContactActivity.launchDetail(view.getContext(), null));
     }
 

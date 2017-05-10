@@ -22,6 +22,7 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
 
     public ActivityContactListBinding activityContactListBinding;
     private ContactListViewModel contactListViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,8 +43,7 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
 //        });
     }
 
-    private void initDatBinding()
-    {
+    private void initDatBinding() {
 
         activityContactListBinding = DataBindingUtil.setContentView(this, R.layout.activity_contact_list);
         contactListViewModel = new ContactListViewModel(this);
@@ -64,7 +64,7 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.menu_contact_list, menu);
+        // getMenuInflater().inflate(R.menu.menu_contact_list, menu);
         return true;
     }
 
@@ -88,19 +88,20 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
         observable.addObserver(this);
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         contactListViewModel.reset();
     }
 
 
-
-    @Override public void update(Observable observable, Object data) {
+    @Override
+    public void update(Observable observable, Object data) {
         if (observable instanceof ContactListViewModel) {
-           ContactListAdapter movieAdapter = (ContactListAdapter) activityContactListBinding.listContact.getAdapter();
+            ContactListAdapter movieAdapter = (ContactListAdapter) activityContactListBinding.listContact.getAdapter();
             ContactListViewModel movieViewModel = (ContactListViewModel) observable;
 
-           movieAdapter.setContactList(ContactHelper.getInstance(this).getAllContacts());
+            movieAdapter.setContactList(ContactHelper.getInstance(this).getAllContacts());
 
         }
     }

@@ -17,7 +17,6 @@ import rx.schedulers.Schedulers;
 public class ContactApplication extends Application {
 
 
-
     private ContactApiService contactApiService;
 
     private Scheduler scheduler;
@@ -29,9 +28,6 @@ public class ContactApplication extends Application {
     public static ContactApplication create(Context context) {
         return ContactApplication.get(context);
     }
-
-
-
 
 
     public ContactApiService getContactApiService() {
@@ -46,9 +42,6 @@ public class ContactApplication extends Application {
 
         return scheduler;
     }
-
-
-
 
 
     public void setScheduler(Scheduler scheduler) {

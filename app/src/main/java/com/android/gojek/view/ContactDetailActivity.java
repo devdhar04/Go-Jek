@@ -33,7 +33,9 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
 
     private ContactDetailBinding movieDetailActivityBinding;
     private static boolean isFavourite = false;
-    @Override protected void onCreate(Bundle savedInstanceState) {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         movieDetailActivityBinding =
                 DataBindingUtil.setContentView(this, R.layout.contact_detail);
@@ -45,18 +47,19 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
 
     public static Intent launchDetail(Context context, Contact contact) {
         Intent intent = new Intent(context, ContactDetailActivity.class);
-        if(contact != null)
-        {    isFavourite =  contact.isFavorite;
-            intent.putExtra(EXTRA_URL,contact.contactDetailUrl);
-            intent.putExtra(EXTRA_FIRST_NAME,contact.firstName);
-            intent.putExtra(EXTRA_LAST_NAME,contact.lastName);
-            intent.putExtra(EXTRA_IMAGE,contact.contactDetailUrl);
+        if (contact != null) {
+            isFavourite = contact.isFavorite;
+            intent.putExtra(EXTRA_URL, contact.contactDetailUrl);
+            intent.putExtra(EXTRA_FIRST_NAME, contact.firstName);
+            intent.putExtra(EXTRA_LAST_NAME, contact.lastName);
+            intent.putExtra(EXTRA_IMAGE, contact.contactDetailUrl);
         }
 
         return intent;
     }
 
     Menu menu;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -66,16 +69,14 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
         return true;
     }
 
-    private void setFavouriteIcon(Menu menu)
-    {
-        if(isFavourite) {
+    private void setFavouriteIcon(Menu menu) {
+        if (isFavourite) {
             menu.getItem(0).setIcon(getResources().getDrawable(R.mipmap.ic_favourite_filled));
-        }
-        else
-        {
+        } else {
             menu.getItem(0).setIcon(getResources().getDrawable(R.mipmap.ic_favourite));
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -87,20 +88,15 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
         if (id == R.id.action_edit) {
             movieDetailActivityBinding.getContactDetailViewModel().clickEdit();
             return true;
-        }
-        else  if (id == R.id.action_favourite) {
+        } else if (id == R.id.action_favourite) {
 
             movieDetailActivityBinding.getContactDetailViewModel().updateContact(menu);
 
             return true;
-        }
-        else if(id == R.id.action_delete)
-        {
+        } else if (id == R.id.action_delete) {
             movieDetailActivityBinding.getContactDetailViewModel().deleteContact();
-         return true;
-        }
-        else if(id == R.id.action_share)
-        {
+            return true;
+        } else if (id == R.id.action_share) {
             movieDetailActivityBinding.getContactDetailViewModel().share();
             return true;
         }
@@ -110,18 +106,18 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
 
     private void getExtrasFromIntent() {
 
-         Contact contact = new Contact();
-         if(getIntent() != null) {
-             contact.setFirstName(getIntent().getStringExtra(EXTRA_FIRST_NAME));
-             contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
-             contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
-             contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
+        Contact contact = new Contact();
+        if (getIntent() != null) {
+            contact.setFirstName(getIntent().getStringExtra(EXTRA_FIRST_NAME));
+            contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
+            contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
+            contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
 
-         }
+        }
 
-        ContactDetailViewModel movieDetailViewModel = new ContactDetailViewModel(this,contact);
+        ContactDetailViewModel movieDetailViewModel = new ContactDetailViewModel(this, contact);
         movieDetailActivityBinding.setContactDetailViewModel(movieDetailViewModel);
-        setTitle(contact.firstName+" "+contact.lastName);
+        setTitle(contact.firstName + " " + contact.lastName);
     }
 
     @Override
