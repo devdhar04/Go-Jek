@@ -24,17 +24,19 @@ import rx.Observable;
 
 public interface ContactApiService {
 
-    @GET Observable<Contact[]> fetchContacts(@Url String url);
+    @GET
+    Observable<Contact[]> fetchContacts(@Url String url);
 
-    @GET Observable<Contact> fetchContact(@Url String url);
+    @GET
+    Observable<Contact> fetchContact(@Url String url);
 
     @PUT
     @Headers("Content-Type: application/json")
-    Observable<Contact> updateContact(@Url String url ,@Body Contact body);
+    Observable<Contact> updateContact(@Url String url, @Body Contact body);
 
     @POST
     @Headers("Content-Type: application/json")
-    Observable<Contact> addContact(@Url String url ,@Body Contact body);
+    Observable<Contact> addContact(@Url String url, @Body Contact body);
 
     @DELETE
     Observable<String> deleteContact(@Url String url);

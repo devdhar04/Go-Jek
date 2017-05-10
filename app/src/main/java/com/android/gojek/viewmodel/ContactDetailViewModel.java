@@ -48,6 +48,7 @@ public class ContactDetailViewModel extends BaseObservable {
     public ObservableInt movieProgress;
 
     private String contactDetailUrl = "";
+
     public ContactDetailViewModel(@NonNull Context context, Contact contact) {
         this.context = context;
         this.contact = contact;
@@ -74,10 +75,10 @@ public class ContactDetailViewModel extends BaseObservable {
 
     }
 
-    public void clickEdit()
-    {
+    public void clickEdit() {
         context.startActivity(AddContactActivity.launchDetail(context, contact));
     }
+
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_phone:
@@ -96,17 +97,16 @@ public class ContactDetailViewModel extends BaseObservable {
 
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
-    public void copyToClipBoard(View view)
-    {
+    public void copyToClipBoard(View view) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("copy", ((TextView)view).getText());
+        ClipData clip = ClipData.newPlainText("copy", ((TextView) view).getText());
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(context,"Copied",Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Copied", Toast.LENGTH_SHORT).show();
     }
 
     private void callNumber() {
         Intent callIntent = new Intent(Intent.ACTION_CALL);
-        callIntent.setData(Uri.parse("tel:"+contact.phoneNumber));
+        callIntent.setData(Uri.parse("tel:" + contact.phoneNumber));
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -120,17 +120,15 @@ public class ContactDetailViewModel extends BaseObservable {
         context.startActivity(callIntent);
     }
 
-    private void sendSMS()
-    {
+    private void sendSMS() {
         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
                 + contact.phoneNumber)));
     }
 
-    private void sendEmail()
-    {
+    private void sendEmail() {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{contact.email});
+        i.putExtra(Intent.EXTRA_EMAIL, new String[]{contact.email});
 
         try {
             context.startActivity(Intent.createChooser(i, "Send mail..."));
@@ -149,12 +147,9 @@ public class ContactDetailViewModel extends BaseObservable {
     }
 
 
-
-
-
     private void fetchContactDetails() {
 
-        contactDetailUrl =   contact.contactDetailUrl;
+        contactDetailUrl = contact.contactDetailUrl;
         unSubscribeFromObservable();
         ContactApplication movieApplication = ContactApplication.create(context);
         ContactApiService ContactApiService = movieApplication.getContactApiService();
@@ -179,27 +174,24 @@ public class ContactDetailViewModel extends BaseObservable {
                 });
     }
 
-     private void setFavouriteIcon(Menu menu)
-     {
-         if(contact.isFavorite) {
-             menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite_filled));
-         }
-         else
-         {
-             menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite));
-         }
-     }
+    private void setFavouriteIcon(Menu menu) {
+        if (contact.isFavorite) {
+            menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite_filled));
+        } else {
+            menu.getItem(0).setIcon(context.getResources().getDrawable(R.mipmap.ic_favourite));
+        }
+    }
 
     public void updateContact(final Menu menu) {
 
         contact.setFavorite(!contact.isFavorite);
         movieProgress.set(View.VISIBLE);
-        String url = WebServiceConstants.CONTACT_UPDATE_URL +contact.id+".json";
+        String url = WebServiceConstants.CONTACT_UPDATE_URL + contact.id + ".json";
 
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
         ContactApiService movieDetailService = contactApplication.getContactApiService();
-        subscription = movieDetailService.updateContact(url,contact)
+        subscription = movieDetailService.updateContact(url, contact)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
@@ -221,13 +213,12 @@ public class ContactDetailViewModel extends BaseObservable {
 
     }
 
-    public void share()
-    {
+    public void share() {
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.addCategory(Intent.CATEGORY_APP_CONTACTS);
         sharingIntent.putExtra(Intent.EXTRA_PHONE_NUMBER, contact.phoneNumber);
-        sharingIntent.putExtra(Intent.EXTRA_USER, contact.firstName+" "+contact.lastName);
+        sharingIntent.putExtra(Intent.EXTRA_USER, contact.firstName + " " + contact.lastName);
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"));
     }
 
@@ -246,7 +237,7 @@ public class ContactDetailViewModel extends BaseObservable {
                     public void call(String movieResponse) {
                         movieProgress.set(View.GONE);
 
-                        ((AppCompatActivity)context).finish();
+                        ((AppCompatActivity) context).finish();
                     }
                 }, new Action1<Throwable>() {
                     @Override

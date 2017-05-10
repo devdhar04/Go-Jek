@@ -56,12 +56,12 @@ public class AddContactViewModel extends BaseObservable {
 
     public String getFirstName() {
 
-        return contact != null ? contact.firstName   : "";
+        return contact != null ? contact.firstName : "";
     }
 
     public String getLastName() {
 
-        return contact != null ? contact.lastName   : "";
+        return contact != null ? contact.lastName : "";
     }
 
     public String getMobileNumber() {
@@ -75,7 +75,6 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
-
     public void clickPicture(View v) {
 
         Intent intent = new Intent();
@@ -83,11 +82,9 @@ public class AddContactViewModel extends BaseObservable {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
-        ((AddContactActivity)context).startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        ((AddContactActivity) context).startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
 
     }
-
-
 
 
     public String getPictureProfile() {
@@ -99,42 +96,33 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
-    private boolean checkValidation(Contact con)
-    {
-        if(con.firstName.length()<3)
-        {
+    private boolean checkValidation(Contact con) {
+        if (con.firstName.length() < 3) {
             firstNameVisibility.set(View.VISIBLE);
             return false;
-        }
-        else if(con.lastName.length()<3)
-        {
+        } else if (con.lastName.length() < 3) {
             lastNameVisibility.set(View.VISIBLE);
             firstNameVisibility.set(View.INVISIBLE);
             return false;
-        }
-        else if(con.phoneNumber.length()<10)
-        {
+        } else if (con.phoneNumber.length() < 10) {
             mobileVisibility.set(View.VISIBLE);
             lastNameVisibility.set(View.INVISIBLE);
             firstNameVisibility.set(View.INVISIBLE);
             return false;
-        }
-        else if(!con.email.matches(emailPattern))
-        {
+        } else if (!con.email.matches(emailPattern)) {
             emailVisibility.set(View.VISIBLE);
             mobileVisibility.set(View.INVISIBLE);
             lastNameVisibility.set(View.INVISIBLE);
             firstNameVisibility.set(View.INVISIBLE);
             return false;
         }
-    return true;
+        return true;
     }
 
 
     public void updateContact(Contact con) {
-        if(!checkValidation(con))
-        {
-            return ;
+        if (!checkValidation(con)) {
+            return;
         }
         movieProgress.set(View.VISIBLE);
         contact.setFirstName(con.firstName);
@@ -142,26 +130,26 @@ public class AddContactViewModel extends BaseObservable {
         contact.setEmail(con.email);
         contact.setPhoneNumber(con.phoneNumber);
         ContactHelper.getInstance(context).update(contact);
-        String url = WebServiceConstants.CONTACT_UPDATE_URL +contact.id+".json";
+        String url = WebServiceConstants.CONTACT_UPDATE_URL + contact.id + ".json";
 
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
         ContactApiService movieDetailService = contactApplication.getContactApiService();
-        subscription = movieDetailService.updateContact(url,contact)
+        subscription = movieDetailService.updateContact(url, contact)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
                     @Override
                     public void call(Contact contact) {
                         movieProgress.set(View.GONE);
-                        ((AddContactActivity)context).finish();
-                      //  changeContactDataSet(contact);
+                        ((AddContactActivity) context).finish();
+                        //  changeContactDataSet(contact);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-                        Toast.makeText(context,"Network Error Occur !",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Network Error Occur !", Toast.LENGTH_SHORT).show();
                         movieProgress.set(View.GONE);
 
                     }
@@ -169,11 +157,9 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
-
     public void addContact(Contact con) {
-        if(!checkValidation(con))
-        {
-            return ;
+        if (!checkValidation(con)) {
+            return;
         }
         movieProgress.set(View.VISIBLE);
         String url = WebServiceConstants.CONTACT_LIST_URL;
@@ -181,21 +167,21 @@ public class AddContactViewModel extends BaseObservable {
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
         ContactApiService movieDetailService = contactApplication.getContactApiService();
-        subscription = movieDetailService.addContact(url,con)
+        subscription = movieDetailService.addContact(url, con)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
                     @Override
                     public void call(Contact contact) {
                         movieProgress.set(View.GONE);
-                        ((AddContactActivity)context).finish();
+                        ((AddContactActivity) context).finish();
                         //  changeContactDataSet(contact);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-                        Toast.makeText(context,"Network Error Occur !",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Network Error Occur !", Toast.LENGTH_SHORT).show();
                         movieProgress.set(View.GONE);
 
                     }
@@ -203,13 +189,10 @@ public class AddContactViewModel extends BaseObservable {
     }
 
 
-
-
     @BindingAdapter({"imageUrl"})
     public static void loadImage(ImageView view, String imageUrl) {
         Glide.with(view.getContext()).load(imageUrl).into(view);
     }
-
 
 
     private void unSubscribeFromObservable() {

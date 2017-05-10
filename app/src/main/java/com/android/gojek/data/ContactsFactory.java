@@ -10,13 +10,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ContactsFactory {
 
 
-  public static ContactApiService createAddService( ) {
-    Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServiceConstants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
-            .build();
-    return retrofit.create(ContactApiService.class);
-  }
+    public static ContactApiService createAddService() {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl(WebServiceConstants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
+        return retrofit.create(ContactApiService.class);
+    }
 
 
 }

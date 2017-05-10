@@ -102,7 +102,7 @@ public class Contact {
         contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_MOBILE)));
         contact.setId(cursor.getInt(cursor.getColumnIndex(ContactContract.ContactEntry._ID)));
         contact.setFavorite(Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_FAVORITE))));
-    return contact;
+        return contact;
     }
 
 }

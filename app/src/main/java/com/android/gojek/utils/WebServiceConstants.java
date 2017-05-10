@@ -7,9 +7,8 @@ package com.android.gojek.utils;
 public class WebServiceConstants {
 
     public static final String BASE_URL = "http://gojek-contacts-app.herokuapp.com";
-    public static final String CONTACT_LIST_URL = BASE_URL+"/contacts.json";
-    public static final String CONTACT_UPDATE_URL ="http://gojek-contacts-app.herokuapp.com/contacts/";
-
+    public static final String CONTACT_LIST_URL = BASE_URL + "/contacts.json";
+    public static final String CONTACT_UPDATE_URL = "http://gojek-contacts-app.herokuapp.com/contacts/";
 
 
 }

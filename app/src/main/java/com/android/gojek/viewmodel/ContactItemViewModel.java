@@ -30,7 +30,7 @@ public class ContactItemViewModel extends BaseObservable {
     private Context context;
 
 
-    String color[] = {"#40A189","#324AF9","#B8251E","#4BB341","#EB6426","#8333FC" };
+    String color[] = {"#40A189", "#324AF9", "#B8251E", "#4BB341", "#EB6426", "#8333FC"};
 
     public ContactItemViewModel(Contact contact, Context context) {
         this.contact = contact;
@@ -54,62 +54,55 @@ public class ContactItemViewModel extends BaseObservable {
 
         return String.valueOf(contact.firstName.toUpperCase().charAt(0));
     }
-    public boolean getFavourite()
-    {
+
+    public boolean getFavourite() {
         return contact.isFavorite;
     }
-    static int index=0;
+
+    static int index = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public GradientDrawable getDrawable()
-    {
-        GradientDrawable bgShape = (GradientDrawable) context.getResources().getDrawable(R.drawable.cicular_shape,context.getTheme());
+    public GradientDrawable getDrawable() {
+        GradientDrawable bgShape = (GradientDrawable) context.getResources().getDrawable(R.drawable.cicular_shape, context.getTheme());
         bgShape.setColor(Color.parseColor(color[index]));
-        if(index<color.length-1) {
+        if (index < color.length - 1) {
             index = index + 1;
+        } else {
+            index = 0;
         }
-        else
-        {
-            index =0;
-        }
-     return bgShape;
+        return bgShape;
     }
+
     @BindingAdapter("drawable")
-    public static void setDrawable(TextView textView,Drawable drawable)
-    {
+    public static void setDrawable(TextView textView, Drawable drawable) {
         textView.setBackgroundDrawable(drawable);
 
     }
 
 
     @BindingAdapter("favourite")
-    public static void setFavourite(ImageView imageView,boolean isFavourite)
-    {
-        if(isFavourite) {
+    public static void setFavourite(ImageView imageView, boolean isFavourite) {
+        if (isFavourite) {
             imageView.setImageResource(R.mipmap.ic_star);
-        }
-        else{
+        } else {
             imageView.setImageResource(R.mipmap.ic_favourite);
         }
 
     }
+
     public void onItemClick(View view) {
         context.startActivity(ContactDetailActivity.launchDetail(view.getContext(), contact));
     }
 
 
-    
-
     public String getPictureProfile() {
-        return WebServiceConstants.BASE_URL+contact.contactImageUrl;
+        return WebServiceConstants.BASE_URL + contact.contactImageUrl;
     }
 
     @BindingAdapter("imageUrl")
     public static void setImageUrl(ImageView imageView, String url) {
         Glide.with(imageView.getContext()).load(url).into(imageView);
     }
-
-
 
 
     public void setContact(Contact contact) {

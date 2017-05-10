@@ -21,6 +21,7 @@ public class ContactHelper {
     private ContactDbHelper mDbHelper;
     private Context context;
     private static ContactHelper singleton = null;
+
     /* A private Constructor prevents any other
      * class from instantiating.
      */
@@ -30,16 +31,14 @@ public class ContactHelper {
     }
 
     /* Static 'instance' method */
-    public static ContactHelper getInstance( Context context ) {
-         if(singleton == null)
-         {
-             singleton = new ContactHelper(context);
-         }
+    public static ContactHelper getInstance(Context context) {
+        if (singleton == null) {
+            singleton = new ContactHelper(context);
+        }
         return singleton;
     }
 
-    public ArrayList<Contact> getAllContacts()
-    {
+    public ArrayList<Contact> getAllContacts() {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
 
@@ -67,7 +66,7 @@ public class ContactHelper {
 
 
         ArrayList<Contact> mArrayList = new ArrayList<Contact>();
-        for(cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+        for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
             // The Cursor is now set to the right position
             Contact contact = new Contact();
             contact.setId(cursor.getInt(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_ID)));
@@ -81,61 +80,55 @@ public class ContactHelper {
             contact.setContactImageUrl(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_PROFILE_PIC_URL)));
             mArrayList.add(contact);
         }
-    return mArrayList;
+        return mArrayList;
     }
 
 
-public void add(Contact contact)
-{
-    SQLiteDatabase db = mDbHelper.getWritableDatabase();
+    public void add(Contact contact) {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
 // Create a new map of values, where column names are the keys
-    ContentValues values = new ContentValues();
-    values.put(ContactContract.ContactEntry.COLUMN_FIRST_NAME, contact.firstName);
-    values.put(ContactContract.ContactEntry.COLUMN_LAST_NAME, contact.firstName);
-    values.put(ContactContract.ContactEntry.COLUMN_MOBILE, contact.phoneNumber);
-    values.put(ContactContract.ContactEntry.COLUMN_EMAIL, contact.email);
-    values.put(ContactContract.ContactEntry.COLUMN_ID, contact.id);
-    values.put(ContactContract.ContactEntry.COLUMN_FAVORITE, String.valueOf(contact.isFavorite));
-    values.put(ContactContract.ContactEntry.COLUMN_PROFILE_DETAIL_URL,  contact.contactDetailUrl);
-    values.put(ContactContract.ContactEntry.COLUMN_PROFILE_PIC_URL, contact.contactImageUrl);
+        ContentValues values = new ContentValues();
+        values.put(ContactContract.ContactEntry.COLUMN_FIRST_NAME, contact.firstName);
+        values.put(ContactContract.ContactEntry.COLUMN_LAST_NAME, contact.firstName);
+        values.put(ContactContract.ContactEntry.COLUMN_MOBILE, contact.phoneNumber);
+        values.put(ContactContract.ContactEntry.COLUMN_EMAIL, contact.email);
+        values.put(ContactContract.ContactEntry.COLUMN_ID, contact.id);
+        values.put(ContactContract.ContactEntry.COLUMN_FAVORITE, String.valueOf(contact.isFavorite));
+        values.put(ContactContract.ContactEntry.COLUMN_PROFILE_DETAIL_URL, contact.contactDetailUrl);
+        values.put(ContactContract.ContactEntry.COLUMN_PROFILE_PIC_URL, contact.contactImageUrl);
 
-try {
-    long newRowId = db.insert(ContactContract.ContactEntry.TABLE_NAME, null, values);
-    Log.v("insert ", "count " + newRowId);
+        try {
+            long newRowId = db.insert(ContactContract.ContactEntry.TABLE_NAME, null, values);
+            Log.v("insert ", "count " + newRowId);
 
-}
-catch (SQLiteConstraintException e)
-{
+        } catch (SQLiteConstraintException e) {
 
-}
-}
+        }
+    }
 
 
-
-
-public void update(Contact contact)
-{
-    SQLiteDatabase db = mDbHelper.getReadableDatabase();
+    public void update(Contact contact) {
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
 // New value for one column
-    ContentValues values = new ContentValues();
-    values.put(ContactContract.ContactEntry.COLUMN_FIRST_NAME, contact.firstName);
-    values.put(ContactContract.ContactEntry.COLUMN_LAST_NAME, contact.firstName);
-    values.put(ContactContract.ContactEntry.COLUMN_MOBILE, contact.phoneNumber);
-    values.put(ContactContract.ContactEntry.COLUMN_EMAIL, contact.email);
+        ContentValues values = new ContentValues();
+        values.put(ContactContract.ContactEntry.COLUMN_FIRST_NAME, contact.firstName);
+        values.put(ContactContract.ContactEntry.COLUMN_LAST_NAME, contact.firstName);
+        values.put(ContactContract.ContactEntry.COLUMN_MOBILE, contact.phoneNumber);
+        values.put(ContactContract.ContactEntry.COLUMN_EMAIL, contact.email);
 
-    int count = db.update(ContactContract.ContactEntry.TABLE_NAME, values, "id = ? ", new String[] { Integer.toString(contact.id) } );
-    Log.v("Update ","count "+count);
+        int count = db.update(ContactContract.ContactEntry.TABLE_NAME, values, "id = ? ", new String[]{Integer.toString(contact.id)});
+        Log.v("Update ", "count " + count);
 
 
-}
-    public void delete(int id)
-    {
+    }
+
+    public void delete(int id) {
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         String selection = ContactContract.ContactEntry._ID + " LIKE ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         int count = db.delete(ContactContract.ContactEntry.TABLE_NAME, selection, selectionArgs);
 
