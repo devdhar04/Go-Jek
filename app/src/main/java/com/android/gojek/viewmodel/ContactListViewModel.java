@@ -55,7 +55,7 @@ public class ContactListViewModel extends Observable {
     public void initializeViews() {
         contactLabel.set(View.GONE);
         contactRecycler.set(View.VISIBLE);
-        contactProgress.set(View.VISIBLE);
+        contactProgress.set(View.GONE);
 
     }
 
@@ -78,7 +78,7 @@ public class ContactListViewModel extends Observable {
     }
 
     public void fetchContactList() {
-
+        showProgressDialog();
         final String URL = WebServiceConstants.CONTACT_LIST_URL;
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
@@ -91,12 +91,16 @@ public class ContactListViewModel extends Observable {
                     public void call(Contact[] contactResponse) {
 
                         saveToDb(contactResponse);
-                        showProgressDialog();
+
                         //contactProgress.set(View.GONE);
                         contactLabel.set(View.GONE);
                         contactRecycler.set(View.VISIBLE);
 
                         changeContactDataSet(contactResponse);
+                        if (progress != null && progress.isShowing()) {
+                            progress.cancel();
+                        }
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -104,9 +108,6 @@ public class ContactListViewModel extends Observable {
                         throwable.printStackTrace();
                         messageLabel.set(context.getString(R.string.error_loading_contacts));
                         contactLabel.set(View.VISIBLE);
-                        if (progress != null && progress.isShowing()) {
-                            progress.cancel();
-                        }
 
                     }
                 });
@@ -119,6 +120,7 @@ public class ContactListViewModel extends Observable {
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         progress.setCancelable(false);
+        progress.show();
     }
 
     private void saveToDb(Contact[] contactResponse) {
