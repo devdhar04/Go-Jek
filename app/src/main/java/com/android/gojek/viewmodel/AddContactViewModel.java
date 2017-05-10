@@ -10,14 +10,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.gojek.BR;
 import com.android.gojek.ContactApplication;
 import com.android.gojek.data.ContactApiService;
+import com.android.gojek.db.ContactHelper;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
 import com.android.gojek.view.AddContactActivity;
 import com.bumptech.glide.Glide;
-import com.google.gson.JsonObject;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -142,7 +141,8 @@ public class AddContactViewModel extends BaseObservable {
         contact.setLastName(con.lastName);
         contact.setEmail(con.email);
         contact.setPhoneNumber(con.phoneNumber);
-        String url = WebServiceConstants.CONTACT_ADD_URL+contact.id+".json";
+        ContactHelper.getInstance(context).update(contact);
+        String url = WebServiceConstants.CONTACT_UPDATE_URL +contact.id+".json";
 
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
@@ -177,7 +177,7 @@ public class AddContactViewModel extends BaseObservable {
         }
         movieProgress.set(View.VISIBLE);
         String url = WebServiceConstants.CONTACT_LIST_URL;
-
+        ContactHelper.getInstance(context).add(con);
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
         ContactApiService movieDetailService = contactApplication.getContactApiService();

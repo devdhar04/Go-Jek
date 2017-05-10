@@ -10,12 +10,10 @@ import android.view.MenuItem;
 
 import com.android.gojek.R;
 import com.android.gojek.databinding.ActivityContactListBinding;
-import com.android.gojek.model.Contact;
+import com.android.gojek.db.ContactHelper;
 import com.android.gojek.view.adapter.ContactListAdapter;
 import com.android.gojek.viewmodel.ContactListViewModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -32,6 +30,7 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
 
         setSupportActionBar(activityContactListBinding.toolbar);
         setupObserver(contactListViewModel);
+        ContactHelper.getInstance(this);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -65,7 +64,7 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_contact_list, menu);
+       // getMenuInflater().inflate(R.menu.menu_contact_list, menu);
         return true;
     }
 
@@ -98,10 +97,10 @@ public class ContactListActivity extends AppCompatActivity implements Observer {
 
     @Override public void update(Observable observable, Object data) {
         if (observable instanceof ContactListViewModel) {
-            ContactListAdapter movieAdapter = (ContactListAdapter) activityContactListBinding.listContact.getAdapter();
+           ContactListAdapter movieAdapter = (ContactListAdapter) activityContactListBinding.listContact.getAdapter();
             ContactListViewModel movieViewModel = (ContactListViewModel) observable;
-            ArrayList<Contact> arrayList = new ArrayList<Contact>(Arrays.asList(movieViewModel.getContactList()));
-            movieAdapter.setContactList(arrayList);
+
+           movieAdapter.setContactList(ContactHelper.getInstance(this).getAllContacts());
 
         }
     }

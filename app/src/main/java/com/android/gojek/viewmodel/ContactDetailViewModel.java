@@ -154,7 +154,7 @@ public class ContactDetailViewModel extends BaseObservable {
 
     private void fetchContactDetails() {
 
-        contactDetailUrl = contact.contactDetailUrl;
+        contactDetailUrl =   contact.contactDetailUrl;
         unSubscribeFromObservable();
         ContactApplication movieApplication = ContactApplication.create(context);
         ContactApiService ContactApiService = movieApplication.getContactApiService();
@@ -194,7 +194,7 @@ public class ContactDetailViewModel extends BaseObservable {
 
         contact.setFavorite(!contact.isFavorite);
         movieProgress.set(View.VISIBLE);
-        String url = WebServiceConstants.CONTACT_ADD_URL+contact.id+".json";
+        String url = WebServiceConstants.CONTACT_UPDATE_URL +contact.id+".json";
 
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);

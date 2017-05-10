@@ -1,5 +1,8 @@
 package com.android.gojek.model;
 
+import android.database.Cursor;
+
+import com.android.gojek.db.ContactContract;
 import com.google.gson.annotations.SerializedName;
 
 /**
@@ -90,4 +93,16 @@ public class Contact {
     public void setContactImageUrl(String contactImageUrl) {
         this.contactImageUrl = contactImageUrl;
     }
+
+    public static Contact fromCursor(Cursor cursor) {
+        Contact contact = new Contact();
+        contact.setFirstName(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_FIRST_NAME)));
+        contact.setLastName(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_LAST_NAME)));
+        contact.setEmail(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_EMAIL)));
+        contact.setPhoneNumber(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_MOBILE)));
+        contact.setId(cursor.getInt(cursor.getColumnIndex(ContactContract.ContactEntry._ID)));
+        contact.setFavorite(Boolean.getBoolean(cursor.getString(cursor.getColumnIndex(ContactContract.ContactEntry.COLUMN_FAVORITE))));
+    return contact;
+    }
+
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import com.android.gojek.ContactApplication;
 import com.android.gojek.R;
 import com.android.gojek.data.ContactApiService;
+import com.android.gojek.db.ContactHelper;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
 import com.android.gojek.view.AddContactActivity;
@@ -43,7 +44,7 @@ public class ContactListViewModel extends Observable {
         contactProgress = new ObservableInt(View.GONE);
         contactRecycler = new ObservableInt(View.GONE);
         contactLabel = new ObservableInt(View.VISIBLE);
-
+        messageLabel = new ObservableField<String>();
         initializeViews();
         fetchContactList();
 
@@ -87,10 +88,12 @@ public class ContactListViewModel extends Observable {
                 .subscribe(new Action1<Contact[]>() {
                     @Override
                     public void call(Contact[] contactResponse) {
+
+                        saveToDb(contactResponse);
                         contactProgress.set(View.GONE);
                         contactLabel.set(View.GONE);
                         contactRecycler.set(View.VISIBLE);
-                        Log.v("Response ","List "+contactResponse);
+
                         changeContactDataSet(contactResponse);
                     }
                 }, new Action1<Throwable>() {
@@ -98,12 +101,25 @@ public class ContactListViewModel extends Observable {
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
                         messageLabel.set(context.getString(R.string.error_loading_contacts));
-                        //movieProgress.set(View.GONE);
+                        contactLabel.set(View.VISIBLE);
+                        contactProgress.set(View.GONE);
                         //movieLabel.set(View.VISIBLE);
                         //movieRecycler.set(View.GONE);
                     }
                 });
     }
+
+
+    private void saveToDb(Contact[] contactResponse)
+    {
+        for (Contact contact : contactResponse)
+        {
+            ContactHelper.getInstance(context).add(contact);
+
+        }
+    }
+
+
 
     public void onClick(View view)
     {

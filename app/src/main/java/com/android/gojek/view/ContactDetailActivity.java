@@ -116,6 +116,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
              contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
              contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
              contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
+
          }
 
         ContactDetailViewModel movieDetailViewModel = new ContactDetailViewModel(this,contact);

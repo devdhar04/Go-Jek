@@ -1,6 +1,7 @@
 package com.android.gojek.viewmodel;
 
 import android.content.Context;
+
 import android.databinding.BaseObservable;
 import android.databinding.BindingAdapter;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ public class ContactItemViewModel extends BaseObservable {
 
     private Contact contact;
     private Context context;
+
 
     String color[] = {"#40A189","#324AF9","#B8251E","#4BB341","#EB6426","#8333FC" };
 
@@ -96,6 +98,8 @@ public class ContactItemViewModel extends BaseObservable {
     }
 
 
+    
+
     public String getPictureProfile() {
         return WebServiceConstants.BASE_URL+contact.contactImageUrl;
     }
@@ -104,6 +108,7 @@ public class ContactItemViewModel extends BaseObservable {
     public static void setImageUrl(ImageView imageView, String url) {
         Glide.with(imageView.getContext()).load(url).into(imageView);
     }
+
 
 
 
