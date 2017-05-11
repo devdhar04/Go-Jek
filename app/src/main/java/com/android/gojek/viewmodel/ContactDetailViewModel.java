@@ -26,6 +26,7 @@ import com.android.gojek.R;
 import com.android.gojek.data.ContactApiService;
 import com.android.gojek.db.ContactHelper;
 import com.android.gojek.model.Contact;
+import com.android.gojek.utils.Utils;
 import com.android.gojek.utils.WebServiceConstants;
 
 import com.android.gojek.view.AddContactActivity;
@@ -167,7 +168,7 @@ public class ContactDetailViewModel extends BaseObservable {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-
+                        Utils.showAlertDialog(context.getString(R.string.network_error_msg),context);
                         movieProgress.set(View.GONE);
 
                     }
