@@ -11,9 +11,11 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.gojek.ContactApplication;
+import com.android.gojek.R;
 import com.android.gojek.data.ContactApiService;
 import com.android.gojek.db.ContactHelper;
 import com.android.gojek.model.Contact;
+import com.android.gojek.utils.Utils;
 import com.android.gojek.utils.WebServiceConstants;
 import com.android.gojek.view.AddContactActivity;
 import com.bumptech.glide.Glide;
@@ -34,23 +36,22 @@ public class AddContactViewModel extends BaseObservable {
     private Context context;
     private Subscription subscription;
 
-    public ObservableInt movieProgress;
+    public ObservableInt contactProgress;
     public ObservableInt firstNameVisibility;
     public ObservableInt lastNameVisibility;
     public ObservableInt mobileVisibility;
     public ObservableInt emailVisibility;
-    private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
 
     public AddContactViewModel(@NonNull Context context, Contact contact) {
         this.context = context;
         this.contact = contact;
 
-        movieProgress = new ObservableInt(View.GONE);
+        contactProgress = new ObservableInt(View.GONE);
         firstNameVisibility = new ObservableInt(View.GONE);
         lastNameVisibility = new ObservableInt(View.GONE);
         mobileVisibility = new ObservableInt(View.GONE);
         emailVisibility = new ObservableInt(View.GONE);
-
 
     }
 
@@ -109,7 +110,7 @@ public class AddContactViewModel extends BaseObservable {
             lastNameVisibility.set(View.INVISIBLE);
             firstNameVisibility.set(View.INVISIBLE);
             return false;
-        } else if (!con.email.matches(emailPattern)) {
+        } else if (!Utils.isEmailValid(con.email)) {
             emailVisibility.set(View.VISIBLE);
             mobileVisibility.set(View.INVISIBLE);
             lastNameVisibility.set(View.INVISIBLE);
@@ -124,33 +125,34 @@ public class AddContactViewModel extends BaseObservable {
         if (!checkValidation(con)) {
             return;
         }
-        movieProgress.set(View.VISIBLE);
+        contactProgress.set(View.VISIBLE);
         contact.setFirstName(con.firstName);
         contact.setLastName(con.lastName);
         contact.setEmail(con.email);
         contact.setPhoneNumber(con.phoneNumber);
-        ContactHelper.getInstance(context).update(contact);
+
         String url = WebServiceConstants.CONTACT_UPDATE_URL + contact.id + ".json";
 
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
-        ContactApiService movieDetailService = contactApplication.getContactApiService();
-        subscription = movieDetailService.updateContact(url, contact)
+        ContactApiService contactApiService = contactApplication.getContactApiService();
+        subscription = contactApiService.updateContact(url, contact)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
                     @Override
                     public void call(Contact contact) {
-                        movieProgress.set(View.GONE);
+                        contactProgress.set(View.GONE);
                         ((AddContactActivity) context).finish();
                         //  changeContactDataSet(contact);
+                        ContactHelper.getInstance(context).update(contact);
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
                         Toast.makeText(context, "Network Error Occur !", Toast.LENGTH_SHORT).show();
-                        movieProgress.set(View.GONE);
+                        contactProgress.set(View.GONE);
 
                     }
                 });
@@ -161,19 +163,20 @@ public class AddContactViewModel extends BaseObservable {
         if (!checkValidation(con)) {
             return;
         }
-        movieProgress.set(View.VISIBLE);
+        contactProgress.set(View.VISIBLE);
         String url = WebServiceConstants.CONTACT_LIST_URL;
-        ContactHelper.getInstance(context).add(con);
+
         unSubscribeFromObservable();
         ContactApplication contactApplication = ContactApplication.create(context);
-        ContactApiService movieDetailService = contactApplication.getContactApiService();
-        subscription = movieDetailService.addContact(url, con)
+        ContactApiService contactApiService = contactApplication.getContactApiService();
+        subscription = contactApiService.addContact(url, con)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(contactApplication.subscribeScheduler())
                 .subscribe(new Action1<Contact>() {
                     @Override
                     public void call(Contact contact) {
-                        movieProgress.set(View.GONE);
+                        ContactHelper.getInstance(context).add(contact);
+                        contactProgress.set(View.GONE);
                         ((AddContactActivity) context).finish();
                         //  changeContactDataSet(contact);
                     }
@@ -181,8 +184,8 @@ public class AddContactViewModel extends BaseObservable {
                     @Override
                     public void call(Throwable throwable) {
                         throwable.printStackTrace();
-                        Toast.makeText(context, "Network Error Occur !", Toast.LENGTH_SHORT).show();
-                        movieProgress.set(View.GONE);
+                        Utils.showAlertDialog(context.getString(R.string.network_error_msg),context);
+                        contactProgress.set(View.GONE);
 
                     }
                 });

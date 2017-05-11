@@ -206,11 +206,11 @@
             android:layout_below="@+id/emailLayout"
             android:layout_marginLeft="77dp"/>
         <ProgressBar
-            android:id="@+id/progress_movie"
+            android:id="@+id/progress_contact"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            app:visibility="@{addContactViewModel.movieProgress}"/>
+            app:visibility="@{addContactViewModel.contactProgress}"/>
 
 </RelativeLayout>
     </layout>

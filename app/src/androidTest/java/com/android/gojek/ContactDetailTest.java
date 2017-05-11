@@ -5,12 +5,9 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.gojek.view.AddContactActivity;
 import com.android.gojek.view.ContactDetailActivity;
 
 import org.junit.Rule;
@@ -55,7 +52,7 @@ public class ContactDetailTest {
         assertThat(viewById,notNullValue());
         assertThat(viewById, instanceOf(TextView.class));
 
-        viewById = activity.findViewById(R.id.progress_movie);
+        viewById = activity.findViewById(R.id.progress_contact);
         assertThat(viewById,notNullValue());
         assertThat(viewById, instanceOf(ProgressBar.class));
     }

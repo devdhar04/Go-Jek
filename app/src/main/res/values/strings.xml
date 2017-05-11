@@ -13,7 +13,8 @@
     <string name="action_delete">Delete</string>
     <string name="save">Save</string>
     <string name="action_share">Share</string>
+    <string name="network_error_msg">Network Error Occur !</string>
 
-
+    <string name="ok">Ok</string>
 
 </resources>

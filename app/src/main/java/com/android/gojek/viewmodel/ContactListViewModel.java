@@ -108,6 +108,10 @@ public class ContactListViewModel extends Observable {
                         throwable.printStackTrace();
                         messageLabel.set(context.getString(R.string.error_loading_contacts));
                         contactLabel.set(View.VISIBLE);
+                        if (progress != null && progress.isShowing()) {
+                            progress.cancel();
+                        }
+
 
                     }
                 });
@@ -116,7 +120,7 @@ public class ContactListViewModel extends Observable {
 
     private void showProgressDialog() {
         progress = new ProgressDialog(context);
-        progress.setMessage("Please wait) ");
+        progress.setMessage("Please wait ");
         progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progress.setIndeterminate(true);
         progress.setCancelable(false);

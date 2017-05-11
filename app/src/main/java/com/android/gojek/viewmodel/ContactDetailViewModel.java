@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.android.gojek.ContactApplication;
 import com.android.gojek.R;
 import com.android.gojek.data.ContactApiService;
+import com.android.gojek.db.ContactHelper;
 import com.android.gojek.model.Contact;
 import com.android.gojek.utils.WebServiceConstants;
 
@@ -54,7 +55,6 @@ public class ContactDetailViewModel extends BaseObservable {
         this.contact = contact;
 
         movieProgress = new ObservableInt(View.VISIBLE);
-
         fetchContactDetails();
 
 
@@ -197,8 +197,10 @@ public class ContactDetailViewModel extends BaseObservable {
                 .subscribe(new Action1<Contact>() {
                     @Override
                     public void call(Contact contact) {
+                        ContactHelper.getInstance(context).updateFavorite(contact);
                         movieProgress.set(View.GONE);
                         setFavouriteIcon(menu);
+
                     }
                 }, new Action1<Throwable>() {
                     @Override
@@ -235,6 +237,7 @@ public class ContactDetailViewModel extends BaseObservable {
                 .subscribe(new Action1<String>() {
                     @Override
                     public void call(String movieResponse) {
+                        ContactHelper.getInstance(context).delete(contact.id);
                         movieProgress.set(View.GONE);
 
                         ((AppCompatActivity) context).finish();

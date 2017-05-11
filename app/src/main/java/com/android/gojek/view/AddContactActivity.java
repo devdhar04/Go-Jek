@@ -35,6 +35,7 @@ public class AddContactActivity extends AppCompatActivity {
     private static final String EXTRA_EMAIL = "CONTACT_EMAIL";
     private static final String EXTRA_SCREEN_NAME = "CONTACT_ADD";
     private static final String EXTRA_CONTACT_ID = "CONTACT_ID";
+    private static final String EXTRA_FAVORITE = "CONTACT_FAVORITE";
 
 
     private AddContactBinding addContactActivityBinding;
@@ -58,7 +59,7 @@ public class AddContactActivity extends AppCompatActivity {
             intent.putExtra(EXTRA_IMAGE, contact.contactImageUrl);
             intent.putExtra(EXTRA_MOBILE, contact.phoneNumber);
             intent.putExtra(EXTRA_EMAIL, contact.email);
-
+            intent.putExtra(EXTRA_FAVORITE, contact.isFavorite);
             intent.putExtra(EXTRA_CONTACT_ID, contact.id);
 
         } else {
@@ -121,6 +122,7 @@ public class AddContactActivity extends AppCompatActivity {
             contact.setPhoneNumber(getIntent().getStringExtra(EXTRA_MOBILE));
             contact.setEmail(getIntent().getStringExtra(EXTRA_EMAIL));
             contact.setId(getIntent().getIntExtra(EXTRA_CONTACT_ID, 0));
+            contact.setFavorite(getIntent().getBooleanExtra(EXTRA_FAVORITE, false));
         }
 
         AddContactViewModel addContactViewModel = new AddContactViewModel(this, contact);

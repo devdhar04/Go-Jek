@@ -30,9 +30,12 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
     private static final String EXTRA_FIRST_NAME = "CONTACT_FIRST_NAME";
     private static final String EXTRA_LAST_NAME = "CONTACT_LAST_NAME";
     private static final String EXTRA_IMAGE = "IMAGE_URL";
+    private static final String EXTRA_FAVORITE = "FAVORITE";
+
 
     private ContactDetailBinding movieDetailActivityBinding;
     private static boolean isFavourite = false;
+    private Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +56,12 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
             intent.putExtra(EXTRA_FIRST_NAME, contact.firstName);
             intent.putExtra(EXTRA_LAST_NAME, contact.lastName);
             intent.putExtra(EXTRA_IMAGE, contact.contactDetailUrl);
+            intent.putExtra(EXTRA_FAVORITE, contact.isFavorite);
         }
 
         return intent;
     }
 
-    Menu menu;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +73,7 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
     }
 
     private void setFavouriteIcon(Menu menu) {
+
         if (isFavourite) {
             menu.getItem(0).setIcon(getResources().getDrawable(R.mipmap.ic_favourite_filled));
         } else {
@@ -112,7 +116,9 @@ public class ContactDetailActivity extends AppCompatActivity implements View.OnL
             contact.setLastName(getIntent().getStringExtra(EXTRA_LAST_NAME));
             contact.setContactDetailUrl(getIntent().getStringExtra(EXTRA_URL));
             contact.setContactImageUrl(getIntent().getStringExtra(EXTRA_IMAGE));
-
+            isFavourite = getIntent().getBooleanExtra(EXTRA_FAVORITE,false);
+           // setFavouriteIcon(menu);
+            contact.setFavorite(isFavourite);
         }
 
         ContactDetailViewModel movieDetailViewModel = new ContactDetailViewModel(this, contact);
