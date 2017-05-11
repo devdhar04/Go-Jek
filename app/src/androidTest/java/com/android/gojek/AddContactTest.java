@@ -1,5 +1,6 @@
 package com.android.gojek;
 
+import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +15,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.android.gojek.model.Contact;
 import com.android.gojek.view.AddContactActivity;
+import com.android.gojek.view.ContactDetailActivity;
 import com.android.gojek.view.ContactListActivity;
 import com.android.gojek.view.adapter.ContactListAdapter;
 
@@ -23,6 +26,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
@@ -50,8 +54,19 @@ import static android.support.test.espresso.intent.Intents.intending;
  */
 @RunWith(AndroidJUnit4.class)
 public class AddContactTest {
+    private static final String EXTRA_SCREEN_NAME = "CONTACT_ADD";
     @Rule
-    public ActivityTestRule<AddContactActivity> rule  = new  ActivityTestRule<>(AddContactActivity.class);
+    public ActivityTestRule<AddContactActivity> rule  = new  ActivityTestRule<AddContactActivity>(AddContactActivity.class){
+        @Override
+        protected Intent getActivityIntent() {
+            Context targetContext = InstrumentationRegistry.getInstrumentation()
+                    .getTargetContext();
+            Intent intent = new Intent(targetContext, AddContactActivity.class);
+
+            intent.putExtra(EXTRA_SCREEN_NAME, EXTRA_SCREEN_NAME);
+            return intent;
+        }
+    };
     @Test
     public void useAppContext() throws Exception {
         // Context of the app under test.
@@ -148,6 +163,8 @@ public class AddContactTest {
 
         onView(withId(R.id.action_save))
                 .perform(click());
+
+
 
     }
 
